@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from .models import Expense, Project, Category
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from django.contrib import messages
 from .forms import ExpenseForm
 
@@ -57,6 +57,11 @@ def confirm_page(request, pk, project_slug):
         'expense':expense
     }
     return render(request, 'budget/are_you_sure.html', context)
+
+class ListProjects(ListView):
+    model = Project
+    template_name = "budget/list_projects.html"
+    context_object_name = 'projects'
 
 class AddProjectView(CreateView):
     model = Project
