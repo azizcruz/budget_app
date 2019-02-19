@@ -1,0 +1,23 @@
+{% extends "budget/base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col s12 m6">
+      <div class="card white darken-1">
+        <div class="card-content black-text">
+          <span class="card-title">Delete</span>
+          <p>Are you sure you want to remove {{ expense.title }} expense ?</p>
+        </div>
+        <div class="card-action">
+        <form method="post">
+        {% csrf_token %}
+            <button type="submit" class="btn red white-text" name="delete" value="1">Yes, delete</button>
+            <button type="submit" class="btn green white-text" name="delete" value="0">Cancel</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

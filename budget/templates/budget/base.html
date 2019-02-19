@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include "budget/includes/head.html" %}
+<body class="grey lighten-5">
+    <div class="container page-wrapper">
+         {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock content %}
+    </div>
+</body>
+    {% include "budget/includes/javascripts.html" %}
+</html>

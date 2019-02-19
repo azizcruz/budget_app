@@ -1,0 +1,89 @@
+{% extends "budget/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="row">
+        <div class="col col-sm-12 col-md-4">
+            <div class="card-panel">
+                <div>Total Budget</div>
+                <h1 class="bold">${{ project.budget }}</h1>
+            </div>
+        </div>
+
+        <div class="col col-sm-12 col-md-4">
+            <div class="card-panel">
+                <div>Budget Left</div>
+                {% if project.budget_left < 0 %}
+                    <h1 class="bold red-text">${{ project.budget_left }}</h1>
+                {% elif project.budget_left == 0 %}
+                    <h1 class="bold orange-text">${{ project.budget_left }}</h1>
+                {% else %}
+                    <h1 class="bold green-text">${{ project.budget_left }}</h1>
+                {% endif %}
+                
+            </div>
+        </div>
+
+        <div class="col col-sm-12 col-md-4">
+            <div class="card-panel">
+                <div>Total Transactions</div>
+                <h1 class="bold">{{ project.total_transactions }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <h1 class="center">{{ project.name }} Expenses</h1>
+
+    <div class="section button-section">
+        <a href="#modal1" class="btn modal-trigger">Add Expense +</a>
+    </div>
+
+    {% comment %} Modal Structure {% endcomment %}
+  <div id="modal1" class="modal">
+  <h3 class="center">Add Expense</h3>
+  <form method="POST">
+    <div class="modal-content">
+        {% csrf_token %}
+        {{ form | crispy }}
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn green white-text modal-close waves-effect waves-green btn-flat mr-3">Add <i class="material-icons right">add</i> <div class="clearfix"></div></a>
+    </div>
+  </form>
+  </div>
+
+    <div class="section expenses-list-section">
+        <div class="expense-row black lighten-3 white-text">
+            <div class="row mb-1 p-4 center">
+                <div class="col col-sm-12 col-md-4">
+                    Title
+                </div>
+                <div class="col col-sm-12 col-md-4">
+                    Amount
+                </div>
+                <div class="col col-sm-12 col-md-4">
+                    Category
+                </div>
+            </div>
+        </div>
+        {% if expenses %}
+            {% for expense in expenses %}
+            <div class="expense-row white z-depth-2">
+                <div class="row position-relative mb-2 p-4 center">
+                    <div class="col col-sm-12 col-md-4">
+                        {{ expense.title }}
+                    </div>
+                    <div class="col col-sm-12 col-md-4">
+                        ${{ expense.amount }}
+                    </div>
+                    <div class="col col-sm-12 col-md-4">
+                        {{ expense.category }}
+                    </div>
+                    <a href="{% url 'budget:confirm_page' expense.id project.slug %}" class="position-absolute remove-icon">X</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="center">No expenses</p>
+        {% endif %}
+    </div>
+{% endblock content %}

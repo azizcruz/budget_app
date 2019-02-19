@@ -1,0 +1,75 @@
+{% extends "budget/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if object %}
+
+{% else %}
+{% endif %}
+
+{% comment %} TODO {% endcomment %}
+{% if  %}
+
+{% else %}
+{% endif %}
+<div class="homepage-box-wrapper d-flex align-items-center justify-content-center">
+    <div class="homepage-box d-flex flex-column border-dashed p-4">
+        <div class="message-section">
+            <h3 class="grey-text">Sorry, You have no projects yet</h3>
+        </div>
+        <div class="button-section d-flex justify-content-center">
+            {% comment %} Modal Trigger {% endcomment %}
+            <a type="submit" class="btn green waves-effect waves-light btn modal-trigger left" href="#modal1">Add Project <i class="material-icons right">add</i> <div class="clearfix"></div></a>
+        </div>
+    </div>
+</div>
+
+<div class="section expenses-list-section">
+        <div class="expense-row black lighten-3 white-text">
+            <div class="row mb-1 p-4 center">
+                <div class="col col-sm-12 col-md-4">
+                    Title
+                </div>
+                <div class="col col-sm-12 col-md-4">
+                    Amount
+                </div>
+                <div class="col col-sm-12 col-md-4">
+                    Category
+                </div>
+            </div>
+        </div>
+        {% if expenses %}
+            {% for expense in expenses %}
+            <div class="expense-row white z-depth-2">
+                <div class="row position-relative mb-2 p-4 center">
+                    <div class="col col-sm-12 col-md-4">
+                        {{ expense.title }}
+                    </div>
+                    <div class="col col-sm-12 col-md-4">
+                        ${{ expense.amount }}
+                    </div>
+                    <div class="col col-sm-12 col-md-4">
+                        {{ expense.category }}
+                    </div>
+                    <a href="{% url 'budget:confirm_page' expense.id project.slug %}" class="position-absolute remove-icon">X</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="center">No expenses</p>
+        {% endif %}
+    </div>
+
+  {% comment %} Modal Structure {% endcomment %}
+  <div id="modal1" class="modal">
+  <h3 class="center">Add Project</h3>
+  <form method="POST">
+    <div class="modal-content">
+        {% csrf_token %}
+        {{ form | crispy }}
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn green white-text modal-close waves-effect waves-green btn-flat">Create <i class="material-icons right">add</i> <div class="clearfix"></div></a>
+    </div>
+  </form>
+  </div>
+{% endblock content %}
