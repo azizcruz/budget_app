@@ -2,7 +2,8 @@ from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from .models import Expense, Project, Category
 from django.views.generic import CreateView, ListView
 from django.contrib import messages
-from .forms import ExpenseForm
+from .forms import ExpenseForm, ProjectForm
+from django.db import IntegrityError
 
 # Create your views here.
 
@@ -62,6 +63,9 @@ class ListProjects(ListView):
     model = Project
     template_name = "budget/list_projects.html"
     context_object_name = 'projects'
+    extra_context = {
+        "form": ProjectForm
+    }
 
 class AddProjectView(CreateView):
     model = Project
@@ -70,5 +74,10 @@ class AddProjectView(CreateView):
     success_url = '/'
 
     def form_valid(self, form):
-        messages.success(self.request, "A project was added")
-        return super().form_valid(form)
+        try:
+            if(super().form_valid(form)):
+                messages.success(self.request, "A project was added")
+                return super().form_valid(form)
+        except IntegrityError as e:
+            messages.warning(self.request, "Project name exists. Try another.")
+            return redirect("/")

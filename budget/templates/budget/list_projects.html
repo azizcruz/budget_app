@@ -40,7 +40,7 @@
 {% comment %} Modal Structure {% endcomment %}
   <div id="modal1" class="modal">
   <h3 class="center">Add Project</h3>
-  <form method="POST">
+  <form action="{% url 'budget:add' %}" method="POST">
     <div class="modal-content">
         {% csrf_token %}
         {{ form | crispy }}
